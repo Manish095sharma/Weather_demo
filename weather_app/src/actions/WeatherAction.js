@@ -18,18 +18,21 @@ const getSucessData = data => ({
     type: WEATHER_DATA,
     payload: { data }
 });
-
-const getFailure = error => ({
+export const getFailure = error => ({
     type: API_ERROR,
     payload: { error }
 });
 
-export const getWeatherData = () => {
+export const getWeatherData = (position) => {
     return async dispatch => {
         dispatch(apiLoading());
         try {
             setTimeout(async () => { //settimeout used for showing loader some time
-                const res = await api.get("/data/2.5/onecall?lat=33.441792&lon=-94.037689&exclude=hourly&appid=cace2521f2edbc91e01e64132eb2c354");
+                const res = await api.get(`/data/2.5/onecall?lat=${position.coords.latitude}&lon=${position.coords.longitude}&exclude=hourly&appid=cace2521f2edbc91e01e64132eb2c354&units=metric`);
+                if (res.data.hasOwnProperty("cod")) {
+                    return dispatch(getFailure(res.data.message))
+
+                }
                 return dispatch(getSucessData(res.data));
             }, 3000)
 

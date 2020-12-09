@@ -7,7 +7,6 @@ const initialState = {
 };
 
 export default function WeatherReducer(state = initialState, action) {
-    console.log("$#$#$#", action)
     switch (action.type) {
         case API_LOADING:
             return {
@@ -20,6 +19,7 @@ export default function WeatherReducer(state = initialState, action) {
             return {
                 ...state,
                 loading: false,
+                error: null,
                 weather_Data: action.payload.data
             };
 
